@@ -4,8 +4,8 @@ let transport = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   auth: {
-    user: "vraj40983@gmail.com",
-    pass: " czlslfuwkbipdagi",
+    user: "<email>",
+    pass: " password",
   },
 });
 
@@ -13,7 +13,7 @@ let transport = nodemailer.createTransport({
 const send_email = async (to,Username, birthdayDate) => {
   try {
     return transport.sendMail({
-      from: "<vraj40983@gmail.com>",
+      from: "<email>",
       to,
       subject: "Birthday Reminder",
       html:`Hello! ${Username} Just a friendly reminder that your birthday is tomorrow, on ${birthdayDate}. Don't forget to celebrate!`,
