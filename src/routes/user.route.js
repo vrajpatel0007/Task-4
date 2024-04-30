@@ -7,7 +7,7 @@ const { authUser } = require("../middleware/auth");
 const path = require("path");
 const passport = require("passport");
 router.post("/register", user_controller.register);
-router.put("/verify/:userId", user_controller.verify);
+router.put("/verify", user_controller.verify);
 router.get("/list", authUser, user_controller.userlist);
 router.get("/profile", authUser, user_controller.profile);
 router.get("/restapi", user_controller.restapi);

@@ -5,18 +5,18 @@ let transport = nodemailer.createTransport({
   port: 587,
   auth: {
     user: "<your email>",
-    pass: " <passowerd>",
+    pass: " <password>",
   },
 });
 
 /** Send Email */
-const send_email = async (to, subject, html) => {
+const send_email = async (to,Username, birthdayDate) => {
   try {
     return transport.sendMail({
-      from: "<frome>",
+      from: "<your email>",
       to,
-      subject,
-      html,
+      subject: "Birthday Reminder",
+      html:`Hello! ${Username} Just a friendly reminder that your birthday is tomorrow, on ${birthdayDate}. Don't forget to celebrate!`,
     });
   } catch (error) {
     return false;

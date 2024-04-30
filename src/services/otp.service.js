@@ -5,7 +5,7 @@ let transport = nodemailer.createTransport({
   port: 587,
   auth: {
     user: "<your email>",
-    pass: " <passowerd>",
+    pass: " <password>",
   },
 });
 
