@@ -74,6 +74,10 @@ const updatatask = async (taskid, body) => {
   return Task.findByIdAndUpdate(taskid, { $set: body }, { new: true });
 };
 
+const count = async () => {
+ return await User.countDocuments()
+}
+
 module.exports = {
   register,
   verifyupdate,
@@ -93,4 +97,8 @@ module.exports = {
   taskByid,
   deletetask,
   updatatask,
+
+
+
+  count
 };

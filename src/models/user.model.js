@@ -6,22 +6,32 @@ const userSchema = new Schema(
       type: String,
     },
     Email: {
-      type: String, 
+      type: String,
     },
     Password: {
       type: String,
     },
-    Birthdate:{
+    Birthdate: {
       type: String,
     },
-    OTP :{
+    OTP: {
       type: String,
     },
-    Isverify:{
+    Isverify: {
       type: Boolean,
       default: false,
     },
-    Task:{
+    Active: {
+      type: String,
+      default: "unblock"
+    },
+    Rol: {
+      type: String,
+      required: true,
+      enum: ["admin", "user"],
+      default: "user",
+    },
+    Task: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user_task",
     }

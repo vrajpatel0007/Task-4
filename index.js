@@ -28,6 +28,13 @@ require("./src/config/google");
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
+app.get("/", (req, res) => {
+  try {
+    return res.status(200).sed(`server listening on http://localhost:${process.env.PORT}`)
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+})
 // app.set("view engine", "ejs");
 // app.set("views", path.join(__dirname, 'src', 'views'));
 app.use("views", express.static(path.join(__dirname, "src", "views")));
@@ -43,23 +50,26 @@ app.listen(process.env.PORT || 3000, () => {
   console.log(`server listening on http://localhost:${process.env.PORT}`);
 });
 
-cron.schedule('40 17 * * *', () => {
-  const user = async (req, res) => {
-    let today = moment().format('DD/MM')
-    const user = await User.findOne()
-    const birthdayDate = moment(user.Birthdate).subtract(1, 'day').format('DD/MM');
-    console.log("🚀 ~ user ~ user:", user)
-    console.log("🚀 ~ user ~ tody:", today)
-    console.log("🚀 ~ user ~ birthdayDate:", birthdayDate)
-    console.log("🚀 ~ user ~ today === birthdayDate:", today == birthdayDate)
-    const birthate = moment(user.Birthdate).format('D MMMM')
-    if (today == birthdayDate) {
-      const email = await send_email(user.Email, user.Username, birthate)
-      console.log("🚀 ~ user ~ email:", email)
+const usersAlreadyReminded = {}; // Object to track users who have been reminded
+
+cron.schedule('0 7 * * *', async () => {
+  const user = async () => {
+    const today = moment().format('DD/MM');
+    const users = await User.find(); // Assuming User model exists
+
+    for (const user of users) {
+      const birthdayDate = moment(user.Birthdate).subtract(1, 'day').format('DD/MM');
+      console.log("🚀 ~ user ~ birthdayDate:", birthdayDate)
+      const birthDateFormatted = moment(user.Birthdate).format('D MMMM');
+      console.log("🚀 ~ user ~ birthDateFormatted:", birthDateFormatted)
+
+      if (today === birthdayDate && !usersAlreadyReminded[user._id]) {
+        const email = await send_email(user.Email, "Birthday Reminder", `Hello! ${user.Username} Just a friendly reminder that your birthday is tomorrow, on ${birthDateFormatted}. Don't forget to celebrate!`);
+        usersAlreadyReminded[user._id] = true; // Mark user as reminded
+      }
     }
-    console.log("🚀 ~ user ~ moment(user.birthday).format('MMMM DD'):", moment(user.Birthdate).format('DD MMMM'))
-    console.log("🚀 ~ user ~ user:", user.Birthdate)
-  }
-  user()
-  console.log('running that task every second', moment().format('DD MM YYYY hh:mm:ss'));
+  };
+
+  user();
+  console.log('Running the task every minute:', moment().format('DD MM YYYY hh:mm:ss'));
 });

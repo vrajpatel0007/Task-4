@@ -394,6 +394,15 @@ const restapi = async (req, res) => {
   }
 };
 
+const count = async (req, res) => {
+  try {
+    const count = await user_service.count()
+    return res.status(200).json({message: count});
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
 module.exports = {
   register,
   verify,
@@ -413,4 +422,7 @@ module.exports = {
   taskdelete,
   taskupdate,
   restapi,
+
+
+  count,
 };
