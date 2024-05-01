@@ -30,7 +30,7 @@ app.use(passport.session());
 app.use(cors());
 app.get("/", (req, res) => {
   try {
-    return res.status(200).sed(`server listening on http://localhost:${process.env.PORT}`)
+    return res.send(`server listening on Port:${process.env.PORT}`)
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }

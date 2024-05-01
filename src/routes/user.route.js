@@ -87,8 +87,8 @@ router.get('/auth/google/failure', (req, res) => {
 router.post("/export-excel")
 router.post("/admin/signup")
 router.post("/admin/login")
-router.post("/:userId/block")
-router.post("/:userId/unblock")
+router.post("/admin/:userId/block")
+router.post("/admin/:userId/unblock")
 router.get('/count', user_controller.count)
 
 module.exports = router;
