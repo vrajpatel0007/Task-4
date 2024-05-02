@@ -165,13 +165,14 @@ const login = async (req, res) => {
     const Password = req.body.Password;
     console.log("🚀 ~ login ~ Password:", Password);
     const user = await user_service.findemail(body.Email);
+    
     console.log("🚀 ~ login ~ body.Email:", body.Email);
     console.log("🚀 ~ login ~ user:", user);
-    if (user.Isverify != true) {
-      return res.status(403).json({ message: "Your Email is not verified" });
-    }
     if (!user) {
       return res.status(404).json({ message: "User Not Found" });
+    }
+    if (user.Isverify != true) {
+      return res.status(403).json({ message: "Your Email is not verified" });
     }
     const bcryptpass = await bcrypt.compare(Password, user.Password);
     if (!bcryptpass) {
@@ -491,6 +492,7 @@ const adminupdate = async (req, res) => {
     if (req.body) {
       body.Name = req.body.Name;
       body.Email = req.body.Email;
+      body.Active = req.body.Active;
     }
     const userupdate = await user_service.userupdate(userid, body);
     return res.status(200).json({ message: "User Updated Successfully" });
