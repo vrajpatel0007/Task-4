@@ -13,6 +13,7 @@ const cron = require('node-cron');
 const { send_email } = require("./src/services/email.service")
 const moment = require('moment');
 const session = require("express-session");
+const ExcelJS = require("exceljs")
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -28,6 +29,33 @@ require("./src/config/google");
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
+app.get("/sheet", async (req,res) => {
+  try {
+    const userData = await User.find()
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Users');
+    worksheet.columns = [
+      { header: 'Username', key: 'Username', width: 20 },
+      { header: 'Email', key: 'Email', width: 30 },
+      { header: 'Birthdate', key: 'Birthdate', width: 10 },
+      { header: 'Role', key: 'Rol', width: 10 },
+      { header: 'Is verify', key: 'Isverify', width: 10 },
+      { header: 'Active', key: 'Active', width: 10 }
+    ];
+
+    userData.forEach(user => {
+      worksheet.addRow(user);
+    });
+
+    workbook.xlsx.writeFile('all_users.xlsx')
+    return res.send("Excel file created successfully")
+    
+
+  } catch (error) {
+    console.log("🚀 ~ app.get ~ error.message:", error.message)
+    return res.status(400).json({ message: error.message });
+  }
+})
 app.get("/", (req, res) => {
   try {
     return res.send(`server listening on Port:${process.env.PORT}`)

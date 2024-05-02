@@ -14,8 +14,17 @@ const   authUser = async (req, res, next) => {
   
 };
 
+const authorizeAdmin = (req, res, next) => {
+  if (req.user && req.user.Rol === 'Admin') {
+    next();
+  } else {
+    res.status(403).json({ message: 'Unauthorized. Admin access required' });
+  }
+};
+
 
 
 module.exports = {
   authUser,
+  authorizeAdmin
 };

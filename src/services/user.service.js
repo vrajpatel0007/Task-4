@@ -6,7 +6,7 @@ const register = async (body) => {
 };
 
 const verifyupdate = async (user) => {
-  return User.findOneAndUpdate({ Email: user } , {Isverify: true , OTP : "0"} , { new: true })
+  return User.findOneAndUpdate({ Email: user }, { Isverify: true, OTP: "0" }, { new: true })
 }
 
 const findemail = async (email) => {
@@ -48,7 +48,7 @@ const usertaskid = async (userid, body) => {
 };
 
 const passupdate = async (userid, body) => {
-  return await User.findByIdAndUpdate(userid,{Password: body},{new: true});
+  return await User.findByIdAndUpdate(userid, { Password: body }, { new: true });
 }
 
 // task
@@ -75,9 +75,16 @@ const updatatask = async (taskid, body) => {
 };
 
 const count = async () => {
- return await User.countDocuments()
+  return await User.countDocuments()
 }
 
+const unblock = async (userid) => {
+  return User.findByIdAndUpdate(userid, { Active: "Active" }, { new: true })
+}
+
+const block = async (userid) => {
+  return User.findByIdAndUpdate(userid, { Active: "block" }, { new: true })
+}
 module.exports = {
   register,
   verifyupdate,
@@ -100,5 +107,7 @@ module.exports = {
 
 
 
-  count
+  count,
+  unblock,
+  block
 };

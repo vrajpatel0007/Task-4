@@ -29,9 +29,11 @@ const register = async (req, res) => {
       Email: reqbody.Email,
       Password: bcrpass,
       Birthdate: reqbody.Birthdate,
-      OTP: otp,
+      OTP: otp
     };
+    console.log("🚀 ~ register ~ body:", body)
     const user = await user_service.register(body);
+    console.log("🚀 ~ register ~ user:", user)
     return res
       .status(200)
       .json({ message: "User registered successfully", user });
@@ -65,6 +67,10 @@ const profile = async (req, res) => {
   try {
     const user = await user_service.findId(req.user._id);
     console.log("🚀 ~ profile ~ user:", user);
+    if (user.Active != "Active") {
+      console.log("🚀 ~ profile ~ user.Active:", user.Active)
+      return res.status(403).json({ message: "User is block" });
+    }
     return res.status(200).json({ message: "User Profile", user: user });
   } catch (error) {
     return res.status(400).json({ message: error });
@@ -89,7 +95,7 @@ const userupdate = async (req, res) => {
   console.log(
     "==================================== Update_User ===================================="
   );
-  const userid = req.params.userId;
+  const userid =  req.user._id;
   console.log("🚀 ~ userupdate ~ userid:", userid);
   try {
     const UserExists = await user_service.findId(userid);
@@ -114,7 +120,8 @@ const userbyid = async (req, res) => {
   console.log(
     "==================================== UserById ===================================="
   );
-  const userid = req.params.userId;
+  const userid = req.user._id;
+  console.log("🚀 ~ userbyid ~ userid:", userid)
   try {
     const userExists = await user_service.findId(userid);
     if (!userExists) {
@@ -134,7 +141,7 @@ const usersdelete = async (req, res) => {
   console.log(
     "==================================== Delete_Users ===================================="
   );
-  const userid = req.params.userId;
+  const userid =  req.user._id;
   try {
     const userExists = await user_service.findId(userid);
     if (!userExists) {
@@ -173,6 +180,7 @@ const login = async (req, res) => {
     const payload = {
       _id: user._id,
       email: user.Email,
+      rol: user.Rol
     };
     console.log("🚀 ~ login ~ payload.email:", payload);
     const token = jwt.sign(payload, process.env.SECRET_key, {
@@ -188,7 +196,7 @@ const login = async (req, res) => {
 
 // update password
 const updatepassword = async (req, res) => {
-  const userid = req.params.userId;
+  const userid =  req.user._id;
   console.log("🚀 ~ updatepassword ~ userid:", userid);
   try {
     const userExists = await user_service.findId(userid);
@@ -397,11 +405,76 @@ const restapi = async (req, res) => {
 const count = async (req, res) => {
   try {
     const count = await user_service.count()
-    return res.status(200).json({message: count});
+    return res.status(200).json({ message: count });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }
 }
+
+const block = async (req, res) => {
+  const userid = req.params.userId;
+  try {
+    const userExists = await user_service.findId(userid);
+    if (!userExists) {
+      return res.status(404).json({ message: "User Not Found" });
+    }
+    const user = await user_service.block(userid);
+    console.log("🚀 ~ block ~ user:", user)
+    return res.status(200).json({ message: "User block", data: user })
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+const unblock = async (req, res) => {
+  const userid = req.params.userId;
+  try {
+    const userExists = await user_service.findId(userid);
+    if (!userExists) {
+      return res.status(404).json({ message: "User Not Found" });
+    }
+    const user = await user_service.unblock(userid);
+    return res.status(200).json({ message: "User unblock", data: user })
+
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+const signup = async (req, res) => {
+  console.log("==================================== Signup ====================================");
+  const reqbody = req.body;
+  console.log("🚀 ~ register ~ reqbody:", reqbody);
+  try {
+    if (!reqbody) {
+      return res.status(400).json({ message: "Invalid request body" });
+    }
+    const UserExists = await user_service.findemail(reqbody.Email);
+    if (UserExists) {
+      return res.status(400).json({ message: "email already exists" });
+    }
+    const bcrpass = await bcrypt.hash(reqbody.Password, 10);
+    const otp = Math.floor(1000 + Math.random() * 9000);
+    const otpsed = send_otp(reqbody.Email, otp);
+    const body = {
+      Username: reqbody.Username,
+      Email: reqbody.Email,
+      Password: bcrpass,
+      Birthdate: reqbody.Birthdate,
+      OTP: otp,
+      Rol: reqbody.rol
+    };
+    console.log("🚀 ~ register ~ body:", body)
+    const admin = await user_service.register(body)
+    console.log("🚀 ~ register ~ Admin:", admin)
+    return res
+      .status(200)
+      .json({ message: "Admin registered successfully", admin });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
 
 module.exports = {
   register,
@@ -423,6 +496,8 @@ module.exports = {
   taskupdate,
   restapi,
 
-
   count,
+  block,
+  unblock,
+  signup
 };

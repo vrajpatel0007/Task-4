@@ -6,16 +6,20 @@ const fs = require("fs");
 const { authUser } = require("../middleware/auth");
 const path = require("path");
 const passport = require("passport");
+const { authorizeAdmin } = require("../middleware/auth")
+
+
+
 router.post("/register", user_controller.register);
 router.put("/verify", user_controller.verify);
-router.get("/list", authUser, user_controller.userlist);
+router.get("/list", authUser, authorizeAdmin, user_controller.userlist);
 router.get("/profile", authUser, user_controller.profile);
 router.get("/restapi", user_controller.restapi);
-router.get("/userByid/:userId", authUser, user_controller.userbyid);
-router.put("/userupdate/:userId", authUser, user_controller.userupdate);
-router.delete("/usersdelete/:userId", authUser, user_controller.usersdelete);
+router.get("/userByid", authUser, user_controller.userbyid);
+router.put("/userupdate", authUser, user_controller.userupdate);
+router.delete("/usersdelete", authUser, user_controller.usersdelete);
 router.post("/login", user_controller.login);
-router.put("/updatepassword/:userId", user_controller.updatepassword);
+router.put("/updatepassword",authUser, user_controller.updatepassword);
 
 // user_task
 router.post(
@@ -84,11 +88,9 @@ router.get('/auth/google/failure', (req, res) => {
 });
 
 
-router.post("/export-excel")
-router.post("/admin/signup")
-router.post("/admin/login")
-router.post("/admin/:userId/block")
-router.post("/admin/:userId/unblock")
+router.post("/admin/signup", user_controller.signup)
+router.post("/admin/:userId/block", user_controller.block)
+router.post("/admin/:userId/unblock", user_controller.unblock)
 router.get('/count', user_controller.count)
 
 module.exports = router;

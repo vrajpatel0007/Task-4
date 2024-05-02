@@ -23,12 +23,11 @@ const userSchema = new Schema(
     },
     Active: {
       type: String,
-      default: "unblock"
+      default: "Active"
     },
     Rol: {
       type: String,
       required: true,
-      enum: ["admin", "user"],
       default: "user",
     },
     Task: {
