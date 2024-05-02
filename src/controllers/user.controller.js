@@ -95,7 +95,7 @@ const userupdate = async (req, res) => {
   console.log(
     "==================================== Update_User ===================================="
   );
-  const userid =  req.user._id;
+  const userid = req.user._id;
   console.log("🚀 ~ userupdate ~ userid:", userid);
   try {
     const UserExists = await user_service.findId(userid);
@@ -141,7 +141,7 @@ const usersdelete = async (req, res) => {
   console.log(
     "==================================== Delete_Users ===================================="
   );
-  const userid =  req.user._id;
+  const userid = req.user._id;
   try {
     const userExists = await user_service.findId(userid);
     if (!userExists) {
@@ -196,7 +196,7 @@ const login = async (req, res) => {
 
 // update password
 const updatepassword = async (req, res) => {
-  const userid =  req.user._id;
+  const userid = req.user._id;
   console.log("🚀 ~ updatepassword ~ userid:", userid);
   try {
     const userExists = await user_service.findId(userid);
@@ -476,6 +476,46 @@ const signup = async (req, res) => {
   }
 };
 
+// adminupdate
+const adminupdate = async (req, res) => {
+
+  const userid = req.params.userId;
+  console.log("🚀 ~ userupdate ~ userid:", userid);
+  try {
+    const UserExists = await user_service.findId(userid);
+    console.log("🚀 ~ userupdate ~ UserExists:", UserExists);
+    if (!UserExists) {
+      return res.status(404).json({ message: "User Not exists" });
+    }
+    const body = {};
+    if (req.body) {
+      body.Name = req.body.Name;
+      body.Email = req.body.Email;
+    }
+    const userupdate = await user_service.userupdate(userid, body);
+    return res.status(200).json({ message: "User Updated Successfully" });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+}
+
+
+// admindelete
+const admindelete = async (req, res) => {
+
+  const userid = req.params.userId;
+  try {
+    const userExists = await user_service.findId(userid);
+    if (!userExists) {
+      return res.status(404).json({ message: "User Not Found" });
+    }
+    const usrer = await user_service.deleteUser(userid);
+    return res.status(200).json({ message: "User Deleted Successfully" });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+}
+
 module.exports = {
   register,
   verify,
@@ -499,5 +539,7 @@ module.exports = {
   count,
   block,
   unblock,
-  signup
+  signup,
+  adminupdate,
+  admindelete
 };

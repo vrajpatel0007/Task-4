@@ -24,7 +24,7 @@ const getUser = async () => {
             $sort: { createdAt: -1 },
           },
           {
-            $limit: 1,
+            $limit: 3,
           },
         ],
         as: "task",
@@ -39,8 +39,9 @@ const findId = async (userid) => {
 const userupdate = async (userid, body) => {
   return await User.findByIdAndUpdate(userid, { $set: body }, { new: true });
 };
-const deleteUser = async (userid) => {
-  return await User.findByIdAndDelete(userid);
+const deleteUser = async (userid, taskid) => {
+  await User.findByIdAndDelete(userid);
+  await Task.findByIdAndDelete(taskid);
 };
 
 const usertaskid = async (userid, body) => {
