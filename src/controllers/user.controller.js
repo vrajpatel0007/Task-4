@@ -2,7 +2,6 @@ const user_service = require("../services/user.service");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const createToken = require("../middleware/auth");
 const { send_otp } = require("../services/otp.service");
 const axios = require("axios");
 
@@ -27,9 +26,9 @@ const register = async (req, res) => {
     const body = {
       Username: reqbody.Username,
       Email: reqbody.Email,
-      Password: bcrpass,
+      Password: reqbody.Password,
       Birthdate: reqbody.Birthdate,
-      OTP: otp
+      OTP: otp,
     };
     console.log("🚀 ~ register ~ body:", body)
     const user = await user_service.register(body);
@@ -107,6 +106,8 @@ const userupdate = async (req, res) => {
     if (req.body) {
       body.Name = req.body.Name;
       body.Email = req.body.Email;
+      body.Birthdate = req.body.Birthdate;
+      body.profile = req.body.profile
     }
     const userupdate = await user_service.userupdate(userid, body);
     return res.status(200).json({ message: "User Updated Successfully" });

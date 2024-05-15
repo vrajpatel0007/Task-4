@@ -1,4 +1,5 @@
 const { Schema, model, mongoose } = require("mongoose");
+const bcrypt  = require('bcrypt')
 
 const userSchema = new Schema(
   {
@@ -33,12 +34,49 @@ const userSchema = new Schema(
     Task: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user_task",
+    },
+    profile: {
+      type: String,
+      default: "public"
+    },
+    follower: {
+      type: Number,
+      default: "0"
+    },
+    following: {
+      type: Number,
+      default: "0"
     }
   },
   {
     timestamps: true,
   }
 );
+
+
+userSchema.pre('save', async function(next) {
+  const user = this;
+  if (!user.isModified('Password')) return next();
+
+  try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(user.Password, salt);
+      user.Password = hashedPassword;
+      next();
+  } catch (error) {
+      return next(error);
+  }
+});
+
+// Method to compare passwords
+userSchema.methods.comparePassword = async function(candidatePassword) {
+  try {
+      return await bcrypt.compare(candidatePassword, this.Password);
+  } catch (error) {
+      throw new Error(error);
+  }
+};
+
 
 const User = model("User", userSchema);
 

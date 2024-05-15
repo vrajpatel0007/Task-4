@@ -29,7 +29,10 @@ require("./src/config/google");
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
-app.get("/sheet", async (req,res) => {
+app.get("/sheet", async (req, res) => {
+  console.log(
+    "==================================== sheet ===================================="
+  );
   try {
     const userData = await User.find()
     const workbook = new ExcelJS.Workbook();
@@ -40,7 +43,9 @@ app.get("/sheet", async (req,res) => {
       { header: 'Birthdate', key: 'Birthdate', width: 10 },
       { header: 'Role', key: 'Rol', width: 10 },
       { header: 'Is verify', key: 'Isverify', width: 10 },
-      { header: 'Active', key: 'Active', width: 10 }
+      { header: 'profile', key: 'profile', width: 10 },
+      { header: 'follower', key: 'follower', width: 10 },
+      { header: 'following', key: 'following', width: 10 }
     ];
 
     userData.forEach(user => {
@@ -49,7 +54,7 @@ app.get("/sheet", async (req,res) => {
 
     workbook.xlsx.writeFile('all_users.xlsx')
     return res.send("Excel file created successfully")
-    
+
 
   } catch (error) {
     console.log("🚀 ~ app.get ~ error.message:", error.message)
@@ -58,7 +63,7 @@ app.get("/sheet", async (req,res) => {
 })
 app.get("/", (req, res) => {
   try {
-    return res.send(`server listening on Port:${process.env.PORT}`)
+    return res.send("Hello Everyone")
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
