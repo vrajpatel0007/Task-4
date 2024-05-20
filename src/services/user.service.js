@@ -52,11 +52,11 @@ const passupdate = async (userid, body) => {
   return await User.findByIdAndUpdate(userid, { Password: body }, { new: true });
 }
 
-const follweing = async (userid,followeingcont)=>{
+const follweing = async (userid, followeingcont) => {
   return await User.findByIdAndUpdate(userid, { following: followeingcont }, { new: true });
 }
 
-const follwer = async (userid,followeingcont)=>{
+const follwer = async (userid, followeingcont) => {
   return await User.findByIdAndUpdate(userid, { follower: followeingcont }, { new: true });
 }
 

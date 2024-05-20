@@ -104,13 +104,14 @@ const userupdate = async (req, res) => {
     }
     const body = {};
     if (req.body) {
-      body.Name = req.body.Name;
+      body.Username = req.body.Username;
       body.Email = req.body.Email;
       body.Birthdate = req.body.Birthdate;
       body.profile = req.body.profile
     }
     const userupdate = await user_service.userupdate(userid, body);
-    return res.status(200).json({ message: "User Updated Successfully" });
+    console.log("🚀 ~ userupdate ~ userupdate:", userupdate)
+    return res.status(200).json({ message: "User Updated Successfully",userupdate });
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }
@@ -188,7 +189,7 @@ const login = async (req, res) => {
     const token = jwt.sign(payload, process.env.SECRET_key, {
       expiresIn: "1d",
     });
-    // const toke = res.cookie("token", token)
+    const toke = res.cookie("token", token)
     console.log("🚀 ~ login ~ token:", token);
     res.status(200).json({ message: "User Login Successful", token: token });
   } catch (error) {
@@ -384,24 +385,25 @@ const restapi = async (req, res) => {
   //   return res.status(500).json({ message: error.message });
   // }
 
-  // axios
-  //   .get("https://api.restful-api.dev/objects")
-  //   .then((response) => {
-  //     const data = response.data;
-  //     return res.status(200).json(data);
-  //   })
-  //   .catch((error) => {
-  //     return res.status(500).json({ message: error.message });
-  //   });
-
-  try {
-    fetch("https://api.restful-api.dev/objects").then(async (response) => {
-      const data = await response.json();
+  axios
+    .get("https://api.restful-api.dev/objects")
+    .then((response) => {
+      const data = response.data;
+      console.log("🚀 ~ .then ~ data:", data)
       return res.status(200).json(data);
+    })
+    .catch((error) => {
+      return res.status(500).json({ message: error.message });
     });
-  } catch (error) {
-    console.log("🚀 ~ restapi ~ error:", error);
-  }
+
+  // try {
+  //   fetch("https://api.restful-api.dev/objects").then(async (response) => {
+  //     const data = await response.json();
+  //     return res.status(200).json(data);
+  //   });
+  // } catch (error) {
+  //   console.log("🚀 ~ restapi ~ error:", error);
+  // }
 };
 
 const count = async (req, res) => {

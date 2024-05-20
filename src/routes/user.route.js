@@ -12,7 +12,7 @@ const { authorizeAdmin } = require("../middleware/auth")
 
 router.post("/register", user_controller.register);
 router.put("/verify", user_controller.verify);
-router.get("/list", authUser, authorizeAdmin, user_controller.userlist);
+router.get("/list", authUser, authorizeAdmin, user_controller.userlist);  
 router.get("/profile", authUser, user_controller.profile);
 router.get("/restapi", user_controller.restapi);
 router.get("/userByid", authUser, user_controller.userbyid);

@@ -1,9 +1,6 @@
 const follow_service = require("../services/follow.servise")
 const user_service = require("../services/user.service")
 
-
-
-
 const getFollowers = async (req, res) => {
     try {
         const userId = req.user._id;

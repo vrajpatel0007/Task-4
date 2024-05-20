@@ -46,7 +46,11 @@ const userSchema = new Schema(
     following: {
       type: Number,
       default: "0"
-    }
+    },
+    post: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+    }]
   },
   {
     timestamps: true,
