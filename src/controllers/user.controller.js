@@ -495,7 +495,7 @@ const adminupdate = async (req, res) => {
     if (req.body) {
       body.Name = req.body.Name;
       body.Email = req.body.Email;
-      body.Active = req.body.Active;
+    body.Active = req.body.Active;
     }
     const userupdate = await user_service.userupdate(userid, body);
     return res.status(200).json({ message: "User Updated Successfully" });

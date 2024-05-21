@@ -20,18 +20,41 @@ const getUser = async () => {
         localField: "_id",
         foreignField: "user_id",
         pipeline: [
-          {
-            $sort: { createdAt: -1 },
-          },
-          {
-            $limit: 3,
-          },
+          { $sort: { createdAt: -1 } },
+          { $limit: 3 }
         ],
-        as: "task",
-      },
+        as: "tasks"
+      }
     },
+    {
+      $lookup: {
+        from: "posts",
+        localField: "_id",
+        foreignField: "user",
+        pipeline: [
+          { $sort: { createdAt: -1 } },
+          { $limit: 3 },
+          {
+            $lookup: {
+              from: "comments",
+              localField: "_id",
+              foreignField: "post",
+              pipeline: [
+                { $sort: { createdAt: -1 } },
+                { $limit: 3 }
+              ],
+              as: "comments"
+            }
+          }
+        ],
+        as: "posts"
+      }
+    }
   ]);
+
   return alluser;
+
+
 };
 const findId = async (userid) => {
   return await User.findById(userid).populate("Task", { user_id: 0 });

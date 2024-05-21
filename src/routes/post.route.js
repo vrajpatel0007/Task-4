@@ -10,11 +10,12 @@ router.delete("/post_delete", authUser, post_controller.delet_post)
 router.get("/userpost", authUser, post_controller.userpost)
 router.get("/users_post", authUser, post_controller.users_post)
 
-
 router.post("/like", authUser, post_controller.like)
+router.get("/postlikes",authUser,post_controller.postlikes)
 
 
 router.post("/comments", authUser, post_controller.comment)
 router.delete("/deletecomment", authUser, post_controller.commentdelet)
+router.get("/postcomment",authUser,post_controller.postcomment)
 
 module.exports = router;

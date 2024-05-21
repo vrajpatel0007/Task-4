@@ -7,9 +7,7 @@ const createpost = async (body) => {
     return await Post.create(body)
 }
 
-const userpost = async (userId, postId) => {
-    return await User.findByIdAndUpdate(userId, { post: postId }, { new: true })
-}
+
 
 const list = async () => {
     return await Post.find()
@@ -51,9 +49,16 @@ const commentfinde = async (commentId) =>{
     return await Comment.findById(commentId)
 }
 
+const postcomment = async (post)=>{
+    return Comment.find({post})
+}
+
+const postlikes = async (post)=>{
+    return await Like.find({post})
+}
+
 module.exports = {
     createpost,
-    userpost,
     list,
     deletepost,
     findId,
@@ -65,6 +70,8 @@ module.exports = {
     postupdate,
     comment,
     commentdelet,
-    commentfinde
+    commentfinde,
+    postcomment,
+    postlikes
 
 }

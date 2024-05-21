@@ -19,7 +19,6 @@ const createpost = async (req, res) => {
         }
         const post = await post_service.createpost(body)
         console.log("🚀 ~ createpost ~ post:", post)
-        const userpost = await post_service.userpost(userId, post._id)
         return res.status(200).json({ message: "post create", post })
     } catch (error) {
         return res.status(404).json({ message: error.message });
@@ -109,6 +108,11 @@ const comment = async (req, res) => {
     const userId = req.user._id
     console.log("🚀 ~ comment ~ userId:", userId)
     try {
+        const postexist = await post_service.findId(postId)
+        console.log("🚀 ~ like ~ postexist:", postexist)
+        if (!postexist) {
+            return res.status(400).json({ message: " post not exist " });
+        }
         const body = {
             Comment: req.body.comment,
             user: userId,
@@ -139,15 +143,45 @@ const commentdelet = async (req, res) => {
     }
 }
 
+const postcomment = async (req,res)=>{
+    const postId = req.body.postId
+    try {
+        const postExist = await post_service.findId(postId)
+        if (!postExist) {
+            return res.status(400).json({ message: " post not exist " });
+        }
+        const comment = await post_service.postcomment(postId)
+        return res.status(200).json({message:"post comment",comment})
+    } catch (error) {
+        return res.status(404).json({ message: error });
+    }
+}
+
+const postlikes = async( req,res)=>{
+    const postId = req.body.postId
+    try {
+        const postExist = await post_service.findId(postId)
+        if (!postExist) {
+            return res.status(400).json({ message: " post not exist " });
+        }
+        const postlikes = await post_service.postlikes(postId)
+        return res.status(200).json({message:"post likes",postlikes})
+    } catch (error) {
+        return res.status(404).json({ message: error });
+    }
+}
+
 module.exports = {
     createpost,
     list,
     delet_post,
     userpost,
     users_post,
+    postcomment,
 
 
     like,
     comment,
-    commentdelet
+    commentdelet,
+    postlikes
 }
