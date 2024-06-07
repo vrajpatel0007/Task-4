@@ -4,19 +4,19 @@ let transport = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   auth: {
-    user: "<email>",
-    pass: " password",
+    user: "vraj40983@gmail.com",
+    pass: " czlslfuwkbipdagi",
   },
 });
 
 /** Send Email */
-const send_email = async (to,Username, birthdayDate) => {
+const send_email = async (to, subject, html) => {
   try {
     return transport.sendMail({
-      from: "<email>",
+      from: "<vraj40983@gmail.com>",
       to,
-      subject: "Birthday Reminder",
-      html:`Hello! ${Username} Just a friendly reminder that your birthday is tomorrow, on ${birthdayDate}. Don't forget to celebrate!`,
+      subject: subject,
+      html: html,
     });
   } catch (error) {
     return false;

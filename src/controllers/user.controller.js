@@ -111,7 +111,7 @@ const userupdate = async (req, res) => {
     }
     const userupdate = await user_service.userupdate(userid, body);
     console.log("🚀 ~ userupdate ~ userupdate:", userupdate)
-    return res.status(200).json({ message: "User Updated Successfully",userupdate });
+    return res.status(200).json({ message: "User Updated Successfully", userupdate });
   } catch (error) {
     return res.status(404).json({ message: error.message });
   }
@@ -167,7 +167,7 @@ const login = async (req, res) => {
     const Password = req.body.Password;
     console.log("🚀 ~ login ~ Password:", Password);
     const user = await user_service.findemail(body.Email);
-    
+
     console.log("🚀 ~ login ~ body.Email:", body.Email);
     console.log("🚀 ~ login ~ user:", user);
     if (!user) {
@@ -253,7 +253,7 @@ const createtask = async (req, res) => {
     const body = {
       Title: req.body.Title,
       Description: req.body.Description,
-      image: "public/temp/" + req.files.image[0].filename,
+      image: "http://localhost:8000/public/temp/" + req.files.image[0].filename,
       user_id: req.user._id,
     };
 
@@ -495,7 +495,7 @@ const adminupdate = async (req, res) => {
     if (req.body) {
       body.Name = req.body.Name;
       body.Email = req.body.Email;
-    body.Active = req.body.Active;
+      body.Active = req.body.Active;
     }
     const userupdate = await user_service.userupdate(userid, body);
     return res.status(200).json({ message: "User Updated Successfully" });

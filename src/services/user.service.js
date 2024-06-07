@@ -51,10 +51,7 @@ const getUser = async () => {
       }
     }
   ]);
-
   return alluser;
-
-
 };
 const findId = async (userid) => {
   return await User.findById(userid).populate("Task", { user_id: 0 });
