@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { send_otp } = require("../services/otp.service");
 const axios = require("axios");
-const SECRET_key = "vjiran"
 // register
 const register = async (req, res) => {
   console.log(
@@ -187,7 +186,7 @@ const login = async (req, res) => {
       rol: user.Rol
     };
     console.log("🚀 ~ login ~ payload.email:", payload);
-    const token = jwt.sign(payload, SECRET_key, {
+    const token = jwt.sign(payload, process.env.SECRET_key, {
       expiresIn: "1d",
     });
     const toke = res.cookie("token", token)
