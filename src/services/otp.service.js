@@ -4,17 +4,17 @@ let transport = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   auth: {
-    user: "your email",
-    pass: " password",
+    user: "vraj40983@gmail.com",
+    pass: " czlslfuwkbipdagi",
   },
 });
 
 /** Send OTP */
-const send_otp = async (to , otp) => {
-  
+const send_otp = async (to, otp) => {
+
   try {
     return transport.sendMail({
-      from: "<your email>",
+      from: "<vraj40983@gmail.com>",
       to,
       subject: "OTP Message",
       html: `your OTP is:${otp}`,
