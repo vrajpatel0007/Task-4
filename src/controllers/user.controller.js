@@ -108,7 +108,9 @@ const userupdate = async (req, res) => {
       body.Email = req.body.Email;
       body.Birthdate = req.body.Birthdate;
       body.profile = req.body.profile
+      body.Address = req.body.Address
     }
+    console.log("🚀 ~ userupdate ~ body:", body)
     const userupdate = await user_service.userupdate(userid, body);
     console.log("🚀 ~ userupdate ~ userupdate:", userupdate)
     return res.status(200).json({ message: "User Updated Successfully", userupdate });
