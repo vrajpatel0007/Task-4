@@ -73,7 +73,7 @@ app.get("/", (req, res) => {
 app.use("views", express.static(path.join(__dirname, "src", "views")));
 app.use(cookieParser());
 module.exports = app;
-app.use("/api",routes);
+app.use(routes);
 dotenv.config({
   path: "./.env",
 });
