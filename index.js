@@ -77,10 +77,11 @@ app.use(routes);
 dotenv.config({
   path: "./.env",
 });
+const PORT = process.env.PORT || 3000
 
 connectDB();
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`server listening on http://localhost:${process.env.PORT}`);
+app.listen(PORT, () => {
+  console.log(`server listening on http://localhost:${PORT}`);
 });
 
 const usersAlreadyReminded = {}; // Object to track users who have been reminded

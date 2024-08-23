@@ -47,6 +47,9 @@ const userSchema = new Schema(
       type: Number,
       default: "0"
     },
+    Address:{
+      type: String,
+    },
     post: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",

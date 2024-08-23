@@ -1,5 +1,4 @@
 node_modules
 public
-otp.service.js
-email.service.js
 all_users.xlsx
+.env
