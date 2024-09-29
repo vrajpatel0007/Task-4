@@ -55,7 +55,7 @@ const verify = async (req, res) => {
       const users = await user_service.verifyupdate(user);
       return res.status(200).json({ message: "Verify Successfully" });
     }
-    return res.status(404).json({ message: "OTP not found" });
+    return res.status(404).json({ message: "Incorrect OTP" });
   } catch (error) {
     return res.status(400).json({ message: error });
   }
@@ -68,7 +68,7 @@ const profile = async (req, res) => {
     console.log("🚀 ~ profile ~ user:", user);
     if (user.Active != "Active") {
       console.log("🚀 ~ profile ~ user.Active:", user.Active)
-      return res.status(403).json({ message: "User is block" });
+      return res.status(403).json({ message: "User is inActive" });
     }
     return res.status(200).json({ message: "User Profile", user: user });
   } catch (error) {
@@ -176,7 +176,7 @@ const login = async (req, res) => {
       return res.status(404).json({ message: "User Not Found" });
     }
     if (user.Isverify != true) {
-      return res.status(403).json({ message: "Your Email is not verified" });
+      return res.status(404).json({ message: "Your Email is not verified" });
     }
     const bcryptpass = await bcrypt.compare(Password, user.Password);
     if (!bcryptpass) {

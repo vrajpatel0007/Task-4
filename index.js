@@ -43,9 +43,6 @@ app.get("/sheet", async (req, res) => {
       { header: 'Birthdate', key: 'Birthdate', width: 10 },
       { header: 'Role', key: 'Rol', width: 10 },
       { header: 'Is verify', key: 'Isverify', width: 10 },
-      { header: 'profile', key: 'profile', width: 10 },
-      { header: 'follower', key: 'follower', width: 10 },
-      { header: 'following', key: 'following', width: 10 }
     ];
 
     userData.forEach(user => {
